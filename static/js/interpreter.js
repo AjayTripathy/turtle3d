@@ -127,14 +127,14 @@ var Exec = function(stmts){
     if (e[0] === 'fd'){
       console.log(state);
       var dist = evalExp(e[1] , env);
-      if (window.TURTLE_IS_MOVING){
-        console.log('queing forward');
-        window.qdActions.push({fn: window.forward , args: [dist , state]}); 
-      }
-      else{
+      //if (window.TURTLE_IS_MOVING){
+      //  console.log('queing forward');
+      //  window.qdActions.push({fn: window.forward , args: [dist , state]}); 
+      //}
+      //else{
         console.log('calling fwd');
         window.forward(dist, state);
-      }
+      //}
     }
     if (e[0] === 'bk'){
      var dist = evalExp(e[1] , env);
@@ -149,14 +149,14 @@ var Exec = function(stmts){
     if (e[0] === 'rt'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      if (window.TURTLE_IS_MOVING){
-        console.log('qing rt');
-        window.qdActions.push({fn: window.turnRight , args: [dist , state]}); 
-      }   
-      else{
+      //if (window.TURTLE_IS_MOVING){
+      //  console.log('qing rt');
+      //  window.qdActions.push({fn: window.turnRight , args: [dist , state]}); 
+      //}   
+      //else{
         console.log('calling right')
         window.turnRight(rad, state);
-      }   
+      //}   
 
     }
     if (e[0] === 'ti'){

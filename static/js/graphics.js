@@ -63,7 +63,17 @@ window.onload = function() {
     var TURTLE_X, TURTLE_Y, TURTLE_Z, TURTLE_R_X, TURTLE_R_Y, TURTLE_R_Z;
     var TURTLE_MOVE_SPEED = 5,
         TURTLE_ROTATE_SPEED = 0.05;
-    window.onTurtleAnimationEnd = function() {console.log('turtle movement complete')};
+    window.onTurtleAnimationEnd = function() {
+    console.log('turtle movement complete')
+      if (window.qdActions.length > 0){ 
+              var qdState = window.qdActions.splice(0,1)[0];
+                  console.log(qdState)
+                      var qdFn = qdState.fn;
+                          var args = qdState.args;
+                              qdFn.apply(this, args);
+                                }   
+
+    };
     window.TURTLE_IS_MOVING = false;
     loader.load('static/models/turtle/turtle.js', function(geometry) {
         var material = new THREE.MeshLambertMaterial({color: defaultColor});
