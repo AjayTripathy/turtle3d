@@ -26,13 +26,12 @@ class buildAst:
     callback = i.jsoncallback
     print code
     parser = parser_generator.makeParser(grammar_parser.parse(open('./spacescript.grm').read()))
-    library = parser.parse(open('./retlibrary.164').read())
+    library = parser.parse(open('./library.164').read())
     ast = parser.parse(code)
     #print desugarer.desugar(ast)
     #desugaredE = desugarer.desugar( library + ast)
     desugaredE = bytecode_compiler.desugar(library + ast)
     web.header('Content-Type', 'application/javascript')
-    print desugaredE
     return "%s(%s)" % (callback, json.dumps(desugaredE)) 
 
 

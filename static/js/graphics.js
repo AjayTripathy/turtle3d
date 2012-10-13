@@ -32,9 +32,9 @@ window.onload = function() {
         aspect = width/height,
         near = 0.1,
         far = 1000,
-        centerX = 1000,
-        centerY = 1000,
-        centerZ = 1000;
+        centerX = 0,
+        centerY = 0,
+        centerZ = 0;
 
     var defaultColor = Math.round(Math.random() * 16777215); 
 
@@ -59,11 +59,19 @@ window.onload = function() {
 
     //turtle
     var loader = new THREE.JSONLoader();
-    var turtle;
+    turtle = null;
     var TURTLE_X, TURTLE_Y, TURTLE_Z, TURTLE_R_X, TURTLE_R_Y, TURTLE_R_Z;
-    var TURTLE_MOVE_SPEED = 5,
-        TURTLE_ROTATE_SPEED = 0.05;
-    window.onTurtleAnimationEnd = function() {console.log('turtle movement complete')};
+    var TURTLE_MOVE_SPEED = 10,
+        TURTLE_ROTATE_SPEED = 0.1;
+    window.onTurtleAnimationEnd = function() {
+      if (window.qdActions.length > 0){ 
+              var qdState = window.qdActions.splice(0,1)[0];
+                      var qdFn = qdState.fn;
+                          var args = qdState.args;
+                              qdFn.apply(this, args);
+                                }   
+
+    };
     window.TURTLE_IS_MOVING = false;
     loader.load('static/models/turtle/turtle.js', function(geometry) {
         var material = new THREE.MeshLambertMaterial({color: defaultColor});
@@ -86,6 +94,7 @@ window.onload = function() {
         scene.add(turtle);
     });
 
+    var LAST_LINE;
 
     window.drawLine = function(x0, y0, z0, x1, y1, z1, color) {
         if (!color) {
@@ -96,6 +105,7 @@ window.onload = function() {
         geometry.vertices.push(new THREE.Vector3(x1+centerX, y1+centerY, z1+centerZ));
         var material = new THREE.LineBasicMaterial({ color: color });
         var line = new THREE.Line(geometry, material);
+        line.geometry.dynamic = true;
         scene.add(line);
         return line;
     };
@@ -111,7 +121,14 @@ window.onload = function() {
         camera.position.x = x;
         camera.position.y = y;
         camera.position.z = z;
-        camera.lookAt(new THREE.Vector3(centerX,centerY,centerZ));
+        var haxis = new THREE.Vector3(1, 0, 0);
+        var vaxis = new THREE.Vector3(0, 1, 0);
+        var rotationMatrix1 = new THREE.Matrix4();
+        rotationMatrix1.makeRotationAxis(haxis, -vradians);
+        var rotationMatrix2 = new THREE.Matrix4();
+        rotationMatrix2.makeRotationAxis(vaxis, hradians);
+        rotationMatrix2.multiplySelf(rotationMatrix1);
+        camera.rotation = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix2);
     };
 
     window.zoomCameraTo = function(fovdegrees) {
@@ -131,7 +148,6 @@ window.onload = function() {
         turtle.rotation.y = yradians;
         turtle.rotation.z = zradians;
     };
-*/
 
     window.rotateTurtleTo = function(xdegrees, ydegrees, zdegrees) {
         var xradians = Math.PI * xdegrees/180;
@@ -140,16 +156,75 @@ window.onload = function() {
         TURTLE_R_X = xradians % (2*Math.PI);
         TURTLE_R_Y = yradians % (2*Math.PI);
         TURTLE_R_Z = zradians % (2*Math.PI);
+        if (TURTLE_R_X != turtle.rotation.x || TURTLE_R_Y != turtle.rotation.y || TURTLE_R_Z != turtle.rotation.z) {
+            window.TURTLE_IS_MOVING = true;
+        }
+    };
+*/
+
+    var getHeading = function() {
+        var heading = new THREE.Vector3(0, 0, 1);
+        var rotationMatrix = new THREE.Matrix4();
+        rotationMatrix.extractRotation(turtle.matrix);
+        rotationMatrix.multiplyVector3(heading);
+        return heading;
     };
 
-    window.moveTurtleTo = function(x, y, z) {
-        TURTLE_X = x + centerX;
-        TURTLE_Y = y + centerY;
-        TURTLE_Z = z + centerZ;
+    window.turnRight = function(angle) {
+        var rotationMatrix1 = new THREE.Matrix4();
+        rotationMatrix1.extractRotation(turtle.matrix);
+        var rotationMatrix2 = new THREE.Matrix4();
+        rotationMatrix2.setRotationFromEuler(new THREE.Vector3(0, -angle, 0), "XYZ");
+        //rotationMatrix2.makeRotationY(angle);
+        rotationMatrix1.multiplySelf(rotationMatrix2);
+        var euler = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix1);
+        TURTLE_R_X = euler.x;
+        TURTLE_R_Y = euler.y;
+        TURTLE_R_Z = euler.z;
+        window.TURTLE_IS_MOVING = true;
     };
+
+    window.turnLeft = function(angle) {
+        turnRight(-angle);
+    };
+
+    window.turnIn = function(angle) {
+        var rotationMatrix1 = new THREE.Matrix4();
+        rotationMatrix1.extractRotation(turtle.matrix);
+        var rotationMatrix2 = new THREE.Matrix4();
+        rotationMatrix2.setRotationFromEuler(new THREE.Vector3(angle, 0, 0), "XYZ");
+        //rotationMatrix2.makeRotationX(angle);
+        rotationMatrix1.multiplySelf(rotationMatrix2);
+        var euler = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix1);
+        TURTLE_R_X = euler.x;
+        TURTLE_R_Y = euler.y;
+        TURTLE_R_Z = euler.z;
+        window.TURTLE_IS_MOVING = true;
+    };
+
+    window.turnOut = function(angle) {
+        turnIn(-angle);
+    };
+
+    window.forward = function(dist) {
+        var heading = getHeading();
+        heading.normalize();
+        heading.multiplyScalar(dist);
+        TURTLE_X = turtle.position.x + heading.x;
+        TURTLE_Y = turtle.position.y + heading.y;
+        TURTLE_Z = turtle.position.z + heading.z;
+        if (heading.x != 0 || heading.y != 0 || heading.z != 0) {
+            window.TURTLE_IS_MOVING = true;
+            var lineX = turtle.position.x - centerX;
+            var lineY = turtle.position.y - centerY;
+            var lineZ = turtle.position.z - centerZ;
+            LAST_LINE = drawLine(lineX, lineY, lineZ, lineX, lineY, lineZ);
+        }
+    };
+
+    var setZeroTimeout=function(a){if(a.postMessage){var b=[],c="asc0tmot",d=function(a){b.push(a),postMessage(c,"*")},e=function(d){if(d.source==a&&d.data==c){d.stopPropagation&&d.stopPropagation();if(b.length)try{b.shift()()}catch(e){setTimeout(function(a){return function(){throw a.stack||a}}(e),0)}b.length&&postMessage(c,"*")}};if(a.addEventListener)return addEventListener("message",e,!0),d;if(a.attachEvent)return attachEvent("onmessage",e),d}return setTimeout}(window);
 
     var animate = function() {
-        requestAnimationFrame(animate);
         var turtleMoved = false;
         if (turtle) {
             if (turtle.position.x > TURTLE_X) {
@@ -200,15 +275,23 @@ window.onload = function() {
                 turtle.rotation.z = Math.min(turtle.rotation.z + TURTLE_ROTATE_SPEED, TURTLE_R_Z);
                 turtleMoved = true;
             }
-            if (turtleMoved) {
-                TURTLE_IS_MOVING = turtleMoved;
+            if (turtleMoved && LAST_LINE != null) {
+                var start = LAST_LINE.geometry.vertices[0];
+                scene.remove(LAST_LINE);
+                LAST_LINE = drawLine(start.x, start.y, start.z, turtle.position.x, turtle.position.y, turtle.position.z);
             }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
-                && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z ) {
-                onTurtleAnimationEnd();
+                && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z) {
+                setZeroTimeout(function() {
+                    TURTLE_IS_MOVING = false;
+                    LAST_LINE = null;
+                    onTurtleAnimationEnd();
+                }, 0);
+ 
             }
         }
         renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     };
 
     animate();

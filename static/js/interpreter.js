@@ -5,8 +5,20 @@ var Closure = function(body, args, env, recurse){
   this.recurse = recurse
 }
 
-window.state = window.makeState();
+window.state = null;
 window.interpreterEnv = { "__up__": null}; 
+window.qdActions = [];
+window.onTurtleAnimationEnd = function() {
+  console.log('turtle movement complete')
+  if (window.qdActions.length > 0){ 
+    var qdState = window.qdActions.splice(0,1)[0];
+    console.log(qdState)
+    var qdFn = qdState.fn;
+    var args = qdState.args;
+    qdFn.apply(this, args);
+  }   
+};  
+
 var Exec = function(stmts){  
   var evalExp = function(e, env){
     var lookup = function(name, env){
@@ -113,34 +125,64 @@ var Exec = function(stmts){
        return Math.sqrt(evalExp(e[1], env))
     }
     if (e[0] === 'fd'){
-      console.log(state);
       var dist = evalExp(e[1] , env);
-      window.forward(dist, state);      
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.forward , args: [dist , state]}); 
+      }
+      else{
+        window.forward(dist, state);
+      }
     }
     if (e[0] === 'bk'){
      var dist = evalExp(e[1] , env);
      dist = dist * -1;
-     window.forward(dist, state);
+     if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.forward , args: [dist , state]}); 
+      }
+      else{
+        window.forward(dist, state);
+      }
     }
     if (e[0] === 'lt'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnLeft(rad, state);  
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnLeft , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnLeft(rad, state);
+      }   
     }
     if (e[0] === 'rt'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnRight(rad, state);
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnRight , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnRight(rad, state);
+      }   
+
     }
     if (e[0] === 'ti'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnIn(rad, state);
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnIn , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnIn(rad, state);
+      }   
     }
     if (e[0] === 'to'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnOut(rad, state);
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnOut , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnOut(rad, state);
+      }   
     }
     if (e[0] === 'pu'){
       window.penUp(state);
