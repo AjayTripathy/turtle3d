@@ -2,7 +2,7 @@
 
 (function(window){
 
-  function makeEnv(){
+  window.makeEnv = function(){
     return {
       rotX: 1,
       rotY: 0,
@@ -18,7 +18,7 @@
     };
   }
 
-  function forward(dist, env) {
+  window.forward = function(dist, env) {
     var start = env.startPos;
 
     // Translate pos vector by rot vector
@@ -38,39 +38,40 @@
     env.z = endZ;
   }
 
-  function turnRight(angle, env){
+  window.turnRight = function(angle, env){
     yaw(angle, env);
   }
 
-  function turnLeft(angle, env){
+  window.turnLeft = function(angle, env){
     yaw(-angle, env);
   }
 
-  function turnIn(angle, env){
+  window.turnIn = function(angle, env){
     pitch(angle, env);
   }
 
-  function turnOut(angle, env){
+  window.turnOut = function(angle, env){
     pitch(-angle, env);
   }
   
-  function penUp(env){
+  window.penUp = function(env){
     env.penActive = false;
   }
 
-  function penDown(){
+  window.penDown = function(env){
     env.penActive = true;
   }
 
-  function penErase(){
+  window.penErase = function(env){
     env.penErase = true;
   }
 
-  function penColor(hex){
+  window.penColor = function(hex, env){
     env.penColor = hex;
   }
 
 
+  /* Internal functions */
   function yaw(angle, env){
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
