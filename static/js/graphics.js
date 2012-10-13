@@ -12,6 +12,9 @@ window.onload = function() {
     socket.on('drawLine', function(args) {
         drawLine.apply(this, args);
     });
+    window.sendDrawLine = function(x0, y0, z0, x1, y1, z1) {
+        socket.emit('drawLine', [x0+centerX, y0+centerY, z0+centerZ, x1+centerX, y1+centerY, z1+centerZ]);
+    };
 
 
     /////////////
@@ -29,15 +32,18 @@ window.onload = function() {
         aspect = width/height,
         near = 0.1,
         far = 1000,
-        centerX = 0,
-        centerY = 0;
+        centerX = 1000,
+        centerY = 1000,
+        centerZ = 1000;
 
     var defaultColor = Math.round(Math.random() * 16777215); 
 
     // camera + renderer
     var renderer = new THREE.WebGLRenderer();
     var camera = new THREE.PerspectiveCamera(CAMERA_FOV, aspect, near, far);
-    camera.position.z = CAMERA_DISTANCE;
+    camera.position.x = centerX;
+    camera.position.y = centerY;
+    camera.position.z = centerZ + CAMERA_DISTANCE;
     var scene = new THREE.Scene();
     scene.add(camera);
     renderer.setSize(width, height);
@@ -64,12 +70,18 @@ window.onload = function() {
         turtle.scale.x = 250;
         turtle.scale.y = 250;
         turtle.scale.z = 250;
-        TURTLE_X = turtle.position.x;
-        TURTLE_Y = turtle.position.y;
-        TURTLE_Z = turtle.position.z;
-        TURTLE_R_X = turtle.rotation.x;
-        TURTLE_R_Y = turtle.rotation.y;
-        TURTLE_R_Z = turtle.rotation.z;
+        TURTLE_X = centerX;
+        TURTLE_Y = centerY;
+        TURTLE_Z = centerZ;
+        TURTLE_R_X = 0;
+        TURTLE_R_Y = 0;
+        TURTLE_R_Z = 0;
+        turtle.position.x = TURTLE_X;
+        turtle.position.y = TURTLE_Y;
+        turtle.position.z = TURTLE_Z;
+        turtle.rotation.x = TURTLE_R_X;
+        turtle.rotation.y = TURTLE_R_Y;
+        turtle.rotation.z = TURTLE_R_Z;
         scene.add(turtle);
     });
 
@@ -79,8 +91,8 @@ window.onload = function() {
             color = defaultColor;
         }
         var geometry = new THREE.Geometry();
-        geometry.vertices.push(new THREE.Vector3(x0, y0, z0));
-        geometry.vertices.push(new THREE.Vector3(x1, y1, z1));
+        geometry.vertices.push(new THREE.Vector3(x0+centerX, y0+centerY, z0+centerZ));
+        geometry.vertices.push(new THREE.Vector3(x1+centerX, y1+centerY, z1+centerZ));
         var material = new THREE.LineBasicMaterial({ color: color });
         var line = new THREE.Line(geometry, material);
         scene.add(line);
@@ -91,14 +103,14 @@ window.onload = function() {
         var hradians = Math.PI * hdegrees/180;
         var vradians = Math.PI * vdegrees/180;
         var x, y, z;
-        y = CAMERA_DISTANCE * Math.sin(vradians);
-        z = CAMERA_DISTANCE * Math.cos(vradians);
-        x = z * Math.sin(hradians);
-        z = z * Math.cos(hradians);
+        y = CAMERA_DISTANCE * Math.sin(vradians) + centerY;
+        z = CAMERA_DISTANCE * Math.cos(vradians) + centerZ;
+        x = (z-centerZ) * Math.sin(hradians) + centerX;
+        z = (z-centerZ) * Math.cos(hradians) + centerZ;
         camera.position.x = x;
         camera.position.y = y;
         camera.position.z = z;
-        camera.lookAt(new THREE.Vector3(0,0,0));
+        camera.lookAt(new THREE.Vector3(centerX,centerY,centerZ));
     };
 
     window.zoomCameraTo = function(fovdegrees) {
@@ -130,9 +142,9 @@ window.onload = function() {
     };
 
     window.moveTurtleTo = function(x, y, z) {
-        TURTLE_X = x;
-        TURTLE_Y = y;
-        TURTLE_Z = z;
+        TURTLE_X = x + centerX;
+        TURTLE_Y = y + centerY;
+        TURTLE_Z = z + centerZ;
     };
 
     var animate = function() {
