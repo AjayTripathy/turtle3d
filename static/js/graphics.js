@@ -219,7 +219,7 @@ window.onload = function() {
             var lineY = turtle.position.y - centerY;
             var lineZ = turtle.position.z - centerZ;
             LAST_LINE = drawLine(lineX, lineY, lineZ, lineX, lineY, lineZ);
-            socket.emit('drawLine', [lineX, lineY, lineZ, lineX, lineY, lineZ]);
+            socket.emit('drawLine', [lineX, lineY, lineZ, lineX, lineY, lineZ, defaultColor]);
         }
     };
 
@@ -280,7 +280,7 @@ window.onload = function() {
                 var start = LAST_LINE.geometry.vertices[0];
                 scene.remove(LAST_LINE);
                 LAST_LINE = drawLine(start.x, start.y, start.z, turtle.position.x, turtle.position.y, turtle.position.z);
-                socket.emit('drawLine', [start.x, start.y, start.z, turtle.position.x, turtle.position.y, turtle.position.z]);
+                socket.emit('drawLine', [start.x, start.y, start.z, turtle.position.x, turtle.position.y, turtle.position.z, defaultColor]);
             }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
                 && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z) {
