@@ -6,7 +6,7 @@ var Closure = function(body, args, env, recurse){
 }
 
 var Exec = function(stmts){  
-     
+  var state = makeState(); 
   var evalExp = function(e, env){
     var lookup = function(name, env){
       if (!(env[name] === undefined)){
@@ -111,6 +111,44 @@ var Exec = function(stmts){
     if (e[0] === 'sqrt'){
        return Math.sqrt(evalExp(e[1], env))
     }
+    if (e[0] === 'fd'){
+      var dist = evalExp(e[1] , env);
+      window.forward(dist, state);      
+    }
+    if (e[0] === 'bk'){
+     var dist = evalExp(e[1] , env);
+     dist = dist * -1;
+     window.forward(dist, state);
+    }
+    if (e[0] === 'lt'){
+      var deg = evalExp(e[1], env)
+      var rad = deg * (Math.pi / 180)
+      window.turnLeft(rad, state);  
+    }
+    if (e[0] === 'rt'){
+      var deg = evalExp(e[1], env)
+      var rad = deg * (Math.pi / 180)
+      window.turnRight(rad, state);
+    }
+    if (e[0] === 'ti'){
+      var deg = evalExp(e[1], env)
+      var rad = deg * (Math.pi / 180)
+      window.turnIn(rad, state);
+    }
+    if (e[0] === 'to'){
+      var deg = evalExp(e[1], env)
+      var rad = deg * (Math.pi / 180)
+      window.turnOut(rad, state);
+    }
+    if (e[0] === 'pu'){
+      window.penUp(state);
+    }
+    if (e[0] === 'pd'){
+      window.penDown(state);
+    }
+    if (e[0] === 'pc'){
+      window.penColor(evalExp(e[1], env), state);
+    }               
     if (e[0] === '=='){
        var e1 = evalExp(e[1], env)
        var e2 = evalExp(e[2], env)
