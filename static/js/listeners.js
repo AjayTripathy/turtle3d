@@ -24,7 +24,7 @@ document.addEventListener('keydown', function(evt) {
 document.addEventListener('mousewheel', function(evt) {
     CAMERA_DISTANCE += evt.wheelDeltaY;
     CAMERA_DISTANCE = Math.min(CAMERA_DISTANCE, CAMERA_FAR);
-    CAMERA_DISTANCE = Math.max(CAMERA_DISTANCE, CAMERA_NEAR);
+    CAMERA_DISTANCE = Math.max(CAMERA_DISTANCE, CAMERA_MIN_ZOOM);
     updateCameraDistance();
 });
 

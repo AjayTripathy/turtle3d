@@ -20,6 +20,7 @@ window.onload = function() {
     window.CAMERA_DISTANCE = 200;
     window.CAMERA_ROTATION_H = 0;
     window.CAMERA_ROTATION_V = 0;
+    window.CAMERA_MIN_ZOOM = 100;
 
     var width = window.innerWidth,
         height = window.innerHeight,
@@ -28,6 +29,7 @@ window.onload = function() {
     window.CAMERA_NEAR = 0.1,
     window.CAMERA_FAR = 1000;
 
+    // camera + renderer
     var renderer = new THREE.WebGLRenderer();
     var camera = new THREE.PerspectiveCamera(fov, aspect, CAMERA_NEAR, CAMERA_FAR);
     camera.position.z = CAMERA_DISTANCE;
@@ -36,10 +38,19 @@ window.onload = function() {
     renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
 
+    // light
+    var topDirectionalLight = new THREE.DirectionalLight(0xffffff);
+    topDirectionalLight.position.set(0, 1, 0);
+    scene.add(topDirectionalLight);
+    var frontDirectionalLight = new THREE.DirectionalLight(0xffffff);
+    frontDirectionalLight.position.set(0, 0, 1);
+    scene.add(frontDirectionalLight);
+
+    //turtle
     var loader = new THREE.JSONLoader();
     var turtle;
     loader.load('static/models/turtle/turtle.js', function(geometry) {
-        var material = new THREE.MeshBasicMaterial({ color: 0x00C986, wireframe: false });
+        var material = new THREE.MeshLambertMaterial({color: 0x00C986});
         turtle = new THREE.Mesh(geometry, material);
         turtle.scale.x = 500;
         turtle.scale.y = 500;
