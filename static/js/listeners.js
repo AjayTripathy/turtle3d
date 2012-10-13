@@ -16,8 +16,6 @@ document.addEventListener('keydown', function(evt) {
             CAMERA_ROTATION_V += 5;
             break;
     }
-    CAMERA_ROTATION_V = Math.min(CAMERA_ROTATION_V, 90);
-    CAMERA_ROTATION_V = Math.max(CAMERA_ROTATION_V, -90);
     rotateCameraTo(CAMERA_ROTATION_H, CAMERA_ROTATION_V);
 });
 
