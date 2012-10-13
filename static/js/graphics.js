@@ -160,8 +160,7 @@ window.onload = function() {
     var rotateTurtle = function(axis, radians) {
         var rotationMatrix = new THREE.Matrix4();
         rotationMatrix.makeRotationAxis(axis.normalize(), radians);
-        turtle.matrix.multiplySelf(rotationMatrix);
-        var rotation = new THREE.Vector3().setEulerFromRotationMatrix(turtle.matrix);
+        var rotation = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix);
         TURTLE_R_X = turtle.rotation.x + rotation.x;
         TURTLE_R_Y = turtle.rotation.y + rotation.y;
         TURTLE_R_Z = turtle.rotation.z + rotation.z;
@@ -171,7 +170,7 @@ window.onload = function() {
     };
 
     window.turnRight = function(angle) {
-        rotateTurtle(turtle.up, angle);
+        rotateTurtle(turtle.up, -angle);
     };
 
     window.turnLeft = function(angle) {
@@ -181,7 +180,7 @@ window.onload = function() {
     window.turnIn = function(angle) {
         var heading = getHeading();
         var rotationAxis = heading.crossSelf(turtle.up);
-        rotateTurtle(rotationAxis, angle);
+        rotateTurtle(rotationAxis, -angle);
     };
 
     window.turnOut = function(angle) {
@@ -253,7 +252,7 @@ window.onload = function() {
                 turtleMoved = true;
             }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
-                && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z ) {
+                && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z) {
                 TURTLE_IS_MOVING = false;
                 onTurtleAnimationEnd();
             }
