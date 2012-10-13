@@ -14,7 +14,7 @@
 
       penActive: true,
       penErase: false,
-      penColor: "#000000"
+      penColor: 0x000000
     };
   }
 
@@ -28,7 +28,7 @@
 
 
     if(state.penActive){
-      drawLine(state.posX, state.posY, end.posZ, endX, endY, endZ, state.penColor);
+      drawLine(state.posX, state.posY, state.posZ, endX, endY, endZ, state.penColor);
     }
 
     moveTurtleTo(state.posX, state.posY, state.posZ, endX, endY, endZ);
