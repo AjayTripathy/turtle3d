@@ -5,7 +5,8 @@ var Closure = function(body, args, env, recurse){
   this.recurse = recurse
 }
 
-window.state = window.makeState(); 
+window.state = window.makeState();
+window.interpreterEnv = { "__up__": null}; 
 var Exec = function(stmts){  
   var evalExp = function(e, env){
     var lookup = function(name, env){
@@ -335,6 +336,6 @@ var Exec = function(stmts){
     }
     return evalStmt(closure.body, frame)
   }
-  return evalStmt(stmts, { "__up__": null})
+  return evalStmt(stmts, window.interpreterEnv)
 }
 
