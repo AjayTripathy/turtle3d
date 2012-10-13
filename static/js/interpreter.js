@@ -136,12 +136,22 @@ var Exec = function(stmts){
     if (e[0] === 'bk'){
      var dist = evalExp(e[1] , env);
      dist = dist * -1;
-     window.forward(dist, state);
+     if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.forward , args: [dist , state]}); 
+      }
+      else{
+        window.forward(dist, state);
+      }
     }
     if (e[0] === 'lt'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnLeft(rad, state);  
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnLeft , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnLeft(rad, state);
+      }   
     }
     if (e[0] === 'rt'){
       var deg = evalExp(e[1], env)
@@ -157,12 +167,22 @@ var Exec = function(stmts){
     if (e[0] === 'ti'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnIn(rad, state);
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnIn , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnIn(rad, state);
+      }   
     }
     if (e[0] === 'to'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnOut(rad, state);
+      if (window.TURTLE_IS_MOVING){
+        window.qdActions.push({fn: window.turnOut , args: [rad ,state ]}); 
+      }   
+      else{
+        window.turnOut(rad, state);
+      }   
     }
     if (e[0] === 'pu'){
       window.penUp(state);
