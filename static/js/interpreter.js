@@ -6,7 +6,7 @@ var Closure = function(body, args, env, recurse){
 }
 
 var Exec = function(stmts){  
-  var state = makeState(); 
+  var state = window.makeState(); 
   var evalExp = function(e, env){
     var lookup = function(name, env){
       if (!(env[name] === undefined)){
