@@ -1,6 +1,6 @@
 {
     "name": "Turtle",
-    "description": "A simple image sharing board.",
+    "description": "Turtle graphics in a browser.",
     "author": "Ajay Tripathy , Ross Breytberg , Sridatta Thatimapala",
     "version": "1.0.0",
     "dependencies": {
