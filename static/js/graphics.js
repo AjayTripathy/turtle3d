@@ -36,13 +36,19 @@ window.onload = function() {
     renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
 
-    var turtleGeometry = new THREE.CubeGeometry(50, 50, 50);
-    var turtleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
-    var turtle = new THREE.Mesh(turtleGeometry, turtleMaterial);
-    var turtleX = turtle.position.x;
-    var turtleY = turtle.position.y;
-    var turtleZ = turtle.position.z;
-    scene.add(turtle);
+    var loader = new THREE.JSONLoader();
+    var turtle;
+    loader.load('static/models/turtle/turtle.js', function(geometry) {
+        var material = new THREE.MeshBasicMaterial({ color: 0x00C986, wireframe: false });
+        turtle = new THREE.Mesh(geometry, material);
+        turtle.scale.x = 500;
+        turtle.scale.y = 500;
+        turtle.scale.z = 500;
+        window.TURTLE_X = turtle.position.x;
+        window.TURTLE_Y = turtle.position.y;
+        window.TURTLE_Z = turtle.position.z;
+        scene.add(turtle);
+    });
 
 
     window.drawLine = function(x0, y0, z0, x1, y1, z1, color) {
@@ -84,6 +90,15 @@ window.onload = function() {
 
     window.moveTurtleTo = function(x, y, z) {
         turtle.position = new THREE.Vector3(x, y, z);
+    };
+
+    window.rotateTurtleTo = function(xdegrees, ydegrees, zdegrees) {
+        var xradians = Math.PI * xdegrees/180;
+        var yradians = Math.PI * ydegrees/180;
+        var zradians = Math.PI * zdegrees/180;
+        turtle.rotation.x = xradians;
+        turtle.rotation.y = yradians;
+        turtle.rotation.z = zradians;
     };
 /*
     window.moveTurtleTo = function(x, y, z) {
