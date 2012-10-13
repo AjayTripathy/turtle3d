@@ -17,8 +17,7 @@ window.onload = function() {
     /////////////
     // graphics
     ///////////
-
-    var CAMERA_RADIUS = 100,
+    var CAMERA_RADIUS = 200,
         CAMERA_ROTATION_H = 0,
         CAMERA_ROTATION_V = 0;
 
@@ -29,10 +28,10 @@ window.onload = function() {
         near = 0.1,
         far = 1000;
 
-    var renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer();
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.z = CAMERA_RADIUS;
-    var scene = new THREE.Scene();
+    scene = new THREE.Scene();
     scene.add(camera);
     renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
@@ -52,7 +51,6 @@ window.onload = function() {
     };
 
     var rotateCameraTo = function(hdegrees, vdegrees) {
-        console.log('degrees', hdegrees, vdegrees);
         var hradians = Math.PI * hdegrees/180;
         var vradians = Math.PI * vdegrees/180;
         var x, y, z;
@@ -77,15 +75,17 @@ window.onload = function() {
                 CAMERA_ROTATION_H += 5;
                 break;
             case 38: // up arrow
-                CAMERA_ROTATION_V += 5;
+                CAMERA_ROTATION_V -= 5;
                 break;
             case 39: // right arrow
                 CAMERA_ROTATION_H -= 5;
                 break;
             case 40: // down arrow
-                CAMERA_ROTATION_V -= 5;
+                CAMERA_ROTATION_V += 5;
                 break;
         }
+        CAMERA_ROTATION_V = Math.min(CAMERA_ROTATION_V, 90);
+        CAMERA_ROTATION_V = Math.max(CAMERA_ROTATION_V, -90);
         rotateCameraTo(CAMERA_ROTATION_H, CAMERA_ROTATION_V);
     });
 
@@ -94,6 +94,6 @@ window.onload = function() {
     drawLine(0, 0, 0, 0, 100, 0, 0x00ff00);
     drawLine(0, 0, 0, 0, 0, 100, 0x0000ff);
 
-    console.log(camera.position.x, camera.position.y, camera.position.z);
+    //console.log(camera.position.x, camera.position.y, camera.position.z);
 
 };
