@@ -172,6 +172,7 @@ window.onload = function() {
 
     window.turnRight = function(angle) {
         TURTLE_R_Y = turtle.rotation.y - angle;
+        window.TURTLE_IS_MOVING = true;
     };
 
     window.turnLeft = function(angle) {
@@ -180,6 +181,7 @@ window.onload = function() {
 
     window.turnIn = function(angle) {
         TURTLE_R_X = turtle.rotation.x + angle;
+        window.TURTLE_IS_MOVING = true;
     };
 
     window.turnOut = function(angle) {
