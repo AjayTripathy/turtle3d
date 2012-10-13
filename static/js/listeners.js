@@ -21,8 +21,10 @@ document.addEventListener('keydown', function(evt) {
     rotateCameraTo(CAMERA_ROTATION_H, CAMERA_ROTATION_V);
 });
 
-document.addEventListener('scrollwheel', function(evt) {
+document.addEventListener('mousewheel', function(evt) {
     CAMERA_DISTANCE += evt.wheelDeltaY;
+    CAMERA_DISTANCE = Math.min(CAMERA_DISTANCE, CAMERA_FAR);
+    CAMERA_DISTANCE = Math.max(CAMERA_DISTANCE, CAMERA_NEAR);
     updateCameraDistance();
 });
 

@@ -17,19 +17,19 @@ window.onload = function() {
     /////////////
     // graphics
     ///////////
-    var CAMERA_DISTANCE = 200,
-        CAMERA_ROTATION_H = 0,
-        CAMERA_ROTATION_V = 0;
+    window.CAMERA_DISTANCE = 200;
+    window.CAMERA_ROTATION_H = 0;
+    window.CAMERA_ROTATION_V = 0;
 
     var width = window.innerWidth,
         height = window.innerHeight,
         fov = 90,
-        aspect = width/height,
-        near = 0.1,
-        far = 1000;
+        aspect = width/height;
+    window.CAMERA_NEAR = 0.1,
+    window.CAMERA_FAR = 1000;
 
     var renderer = new THREE.WebGLRenderer();
-    var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    var camera = new THREE.PerspectiveCamera(fov, aspect, CAMERA_NEAR, CAMERA_FAR);
     camera.position.z = CAMERA_DISTANCE;
     var scene = new THREE.Scene();
     scene.add(camera);
@@ -45,7 +45,7 @@ window.onload = function() {
     scene.add(turtle);
 
 
-    var drawLine = function(x0, y0, z0, x1, y1, z1, color) {
+    window.drawLine = function(x0, y0, z0, x1, y1, z1, color) {
         if (!color) {
             color = 0x000000;
         }
@@ -58,7 +58,7 @@ window.onload = function() {
         return line;
     };
 
-    var rotateCameraTo = function(hdegrees, vdegrees) {
+    window.rotateCameraTo = function(hdegrees, vdegrees) {
         var hradians = Math.PI * hdegrees/180;
         var vradians = Math.PI * vdegrees/180;
         var x, y, z;
@@ -72,25 +72,32 @@ window.onload = function() {
         camera.lookAt(new THREE.Vector3(0,0,0));
     };
 
-    var updateCameraDistance = function() {
-        
+    window.updateCameraDistance = function() {
+        var currentDist = Math.sqrt(Math.pow(camera.position.x, 2) + Math.pow(camera.position.y, 2) + Math.pow(camera.position.z, 2));
+        var unitX = camera.position.x/currentDist;
+        var unitY = camera.position.y/currentDist;
+        var unitZ = camera.position.z/currentDist;
+        camera.position.x = unitX * CAMERA_DISTANCE;
+        camera.position.y = unitY * CAMERA_DISTANCE;
+        camera.position.z = unitZ * CAMERA_DISTANCE;
     };
 
-    var moveTurtleTo = function(x, y, z) {
+    window.moveTurtleTo = function(x, y, z) {
         turtle.position = new THREE.Vector3(x, y, z);
     };
-
-    var moveTurtleTo = function(x, y, z) {
+/*
+    window.moveTurtleTo = function(x, y, z) {
         turtleX = x;
         turtleY = y;
         turtleZ = z;
     };
-
+*/
     var animate = function() {
         requestAnimationFrame(animate);
-        if (turtle.position.)
         renderer.render(scene, camera);
     };
+
+    animate();
 
 
     // testing stuff

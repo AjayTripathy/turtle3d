@@ -6,12 +6,21 @@
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="static/js/three.min.js"></script>
         <script type="text/javascript" src="static/js/interpreter.js"></script>
-        <script type="text/javascript" src="static/js/index.js"></script>
+        <script type="text/javascript" src="static/js/graphics.js"></script>
+        <script type="text/javascript" src="static/js/listeners.js"></script>
+        <script type="text/javascript" src="static/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="static/js/codetest.js"></script>
+        <script type="text/javascript" src="static/js/semantics.js"></script>
     </head>
     <body>
         <div id="usercount">
             <img id="usercount-icon" src="static/images/users.png">
             <span id="usercount-value">1</span>
+        </div>
+        <div id="codeinput">
+            <textarea id="codefield" class="textinput" type="text" name="code" placeholder="Enter your code here" ></textarea>
+            <br />
+            <input id="codesubmitbutton" class="button" type="button" value="Ready" />
         </div>
     </body>
 </html>
