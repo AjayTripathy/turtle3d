@@ -175,6 +175,7 @@ window.onload = function() {
         rotationMatrix1.extractRotation(turtle.matrix);
         var rotationMatrix2 = new THREE.Matrix4();
         rotationMatrix2.setRotationFromEuler(new THREE.Vector3(0, -angle, 0), "XYZ");
+        //rotationMatrix2.makeRotationY(angle);
         rotationMatrix1.multiplySelf(rotationMatrix2);
         var euler = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix1);
         TURTLE_R_X = euler.x;
@@ -192,6 +193,7 @@ window.onload = function() {
         rotationMatrix1.extractRotation(turtle.matrix);
         var rotationMatrix2 = new THREE.Matrix4();
         rotationMatrix2.setRotationFromEuler(new THREE.Vector3(angle, 0, 0), "XYZ");
+        //rotationMatrix2.makeRotationX(angle);
         rotationMatrix1.multiplySelf(rotationMatrix2);
         var euler = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix1);
         TURTLE_R_X = euler.x;
@@ -220,8 +222,9 @@ window.onload = function() {
         }
     };
 
+    var setZeroTimeout=function(a){if(a.postMessage){var b=[],c="asc0tmot",d=function(a){b.push(a),postMessage(c,"*")},e=function(d){if(d.source==a&&d.data==c){d.stopPropagation&&d.stopPropagation();if(b.length)try{b.shift()()}catch(e){setTimeout(function(a){return function(){throw a.stack||a}}(e),0)}b.length&&postMessage(c,"*")}};if(a.addEventListener)return addEventListener("message",e,!0),d;if(a.attachEvent)return attachEvent("onmessage",e),d}return setTimeout}(window);
+
     var animate = function() {
-        requestAnimationFrame(animate);
         var turtleMoved = false;
         if (turtle) {
             if (turtle.position.x > TURTLE_X) {
@@ -279,7 +282,7 @@ window.onload = function() {
             }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
                 && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z) {
-                setTimeout(function() {
+                setZeroTimeout(function() {
                     TURTLE_IS_MOVING = false;
                     LAST_LINE = null;
                     onTurtleAnimationEnd();
@@ -288,6 +291,7 @@ window.onload = function() {
             }
         }
         renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     };
 
     animate();
