@@ -20,18 +20,20 @@ window.onload = function() {
     window.CAMERA_DISTANCE = 200;
     window.CAMERA_ROTATION_H = 0;
     window.CAMERA_ROTATION_V = 0;
-    window.CAMERA_MIN_ZOOM = 100;
+    window.CAMERA_FOV = 90;
+    window.CAMERA_FOV_MIN = 5;
+    window.CAMERA_FOV_MAX = 120;
 
     var width = window.innerWidth,
         height = window.innerHeight,
-        fov = 90,
-        aspect = width/height;
-    window.CAMERA_NEAR = 0.1,
-    window.CAMERA_FAR = 1000;
+        aspect = width/height,
+        near = 0.1,
+        far = 1000;
+ 
 
     // camera + renderer
     var renderer = new THREE.WebGLRenderer();
-    var camera = new THREE.PerspectiveCamera(fov, aspect, CAMERA_NEAR, CAMERA_FAR);
+    var camera = new THREE.PerspectiveCamera(CAMERA_FOV, aspect, near, far);
     camera.position.z = CAMERA_DISTANCE;
     var scene = new THREE.Scene();
     scene.add(camera);
@@ -89,20 +91,15 @@ window.onload = function() {
         camera.lookAt(new THREE.Vector3(0,0,0));
     };
 
-    window.updateCameraDistance = function() {
-        var currentDist = Math.sqrt(Math.pow(camera.position.x, 2) + Math.pow(camera.position.y, 2) + Math.pow(camera.position.z, 2));
-        var unitX = camera.position.x/currentDist;
-        var unitY = camera.position.y/currentDist;
-        var unitZ = camera.position.z/currentDist;
-        camera.position.x = unitX * CAMERA_DISTANCE;
-        camera.position.y = unitY * CAMERA_DISTANCE;
-        camera.position.z = unitZ * CAMERA_DISTANCE;
+    window.zoomCameraTo = function(fovdegrees) {
+        camera.fov = fovdegrees;
+        camera.updateProjectionMatrix();
     };
-
+/*
     window.moveTurtleTo = function(x, y, z) {
         turtle.position = new THREE.Vector3(x, y, z);
     };
-
+*/
     window.rotateTurtleTo = function(xdegrees, ydegrees, zdegrees) {
         var xradians = Math.PI * xdegrees/180;
         var yradians = Math.PI * ydegrees/180;
@@ -111,15 +108,28 @@ window.onload = function() {
         turtle.rotation.y = yradians;
         turtle.rotation.z = zradians;
     };
-/*
+
     window.moveTurtleTo = function(x, y, z) {
-        turtleX = x;
-        turtleY = y;
-        turtleZ = z;
+        window.TURTLE_X = x;
+        window.TURTLE_Y = y;
+        window.TURTLE_Z = z;
     };
-*/
+
     var animate = function() {
         requestAnimationFrame(animate);
+        var turtleMoved = false;
+        /*
+        if (turtle.position.x > TURTLE_X) {
+            turtle.position.x = Math.max(turtle.position.1;
+            turtleMoved = true;
+        }
+        if (turtle.position.x < TURTLE_X) {
+            turlte.position.x += 1;
+        }
+        if (turtle.position.x != TURTLE_X || turtle.position.y != TURTLE_Y || turtle.position.z != TURTLE_Z) {
+
+        }
+        */
         renderer.render(scene, camera);
     };
 
