@@ -39,3 +39,7 @@ body {
     background: rgba(0, 0, 0, 0.2);
     border-top-right-radius: 10px;
 }
+
+#codefield {
+    border-top-right-radius: 5px;
+}
