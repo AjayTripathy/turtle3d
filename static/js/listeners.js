@@ -20,17 +20,9 @@ document.addEventListener('keydown', function(evt) {
     CAMERA_ROTATION_V = Math.max(CAMERA_ROTATION_V, -90);
     rotateCameraTo(CAMERA_ROTATION_H, CAMERA_ROTATION_V);
 });
-/*
-document.addEventListener('mousewheel', function(evt) {
-    CAMERA_DISTANCE += evt.wheelDeltaY;
-    CAMERA_DISTANCE = Math.min(CAMERA_DISTANCE, CAMERA_FAR);
-    CAMERA_DISTANCE = Math.max(CAMERA_DISTANCE, CAMERA_MIN_ZOOM);
-    updateCameraDistance();
-});
-*/
 
 document.addEventListener('mousewheel', function(evt) {
-    CAMERA_FOV -= evt.wheelDeltaY;
+    CAMERA_FOV += evt.wheelDeltaY/10;
     CAMERA_FOV = Math.min(CAMERA_FOV, CAMERA_FOV_MAX);
     CAMERA_FOV = Math.max(CAMERA_FOV, CAMERA_FOV_MIN);
     zoomCameraTo(CAMERA_FOV);
