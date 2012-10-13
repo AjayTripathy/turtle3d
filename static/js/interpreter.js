@@ -5,8 +5,8 @@ var Closure = function(body, args, env, recurse){
   this.recurse = recurse
 }
 
+window.state = window.makeState(); 
 var Exec = function(stmts){  
-  var state = window.makeState(); 
   var evalExp = function(e, env){
     var lookup = function(name, env){
       if (!(env[name] === undefined)){
@@ -112,6 +112,7 @@ var Exec = function(stmts){
        return Math.sqrt(evalExp(e[1], env))
     }
     if (e[0] === 'fd'){
+      console.log(state);
       var dist = evalExp(e[1] , env);
       window.forward(dist, state);      
     }
@@ -127,7 +128,7 @@ var Exec = function(stmts){
     }
     if (e[0] === 'rt'){
       var deg = evalExp(e[1], env)
-      var rad = deg * (Math.pi / 180)
+      var rad = deg * (Math.PI / 180)
       window.turnRight(rad, state);
     }
     if (e[0] === 'ti'){
