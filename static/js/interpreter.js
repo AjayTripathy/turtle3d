@@ -5,7 +5,8 @@ var Closure = function(body, args, env, recurse){
   this.recurse = recurse
 }
 
-window.state = window.makeState(); 
+window.state = window.makeState();
+window.interpreterEnv = { "__up__": null}; 
 var Exec = function(stmts){  
   var evalExp = function(e, env){
     var lookup = function(name, env){
@@ -123,7 +124,7 @@ var Exec = function(stmts){
     }
     if (e[0] === 'lt'){
       var deg = evalExp(e[1], env)
-      var rad = deg * (Math.pi / 180)
+      var rad = deg * (Math.PI / 180)
       window.turnLeft(rad, state);  
     }
     if (e[0] === 'rt'){
@@ -133,12 +134,12 @@ var Exec = function(stmts){
     }
     if (e[0] === 'ti'){
       var deg = evalExp(e[1], env)
-      var rad = deg * (Math.pi / 180)
+      var rad = deg * (Math.PI / 180)
       window.turnIn(rad, state);
     }
     if (e[0] === 'to'){
       var deg = evalExp(e[1], env)
-      var rad = deg * (Math.pi / 180)
+      var rad = deg * (Math.PI / 180)
       window.turnOut(rad, state);
     }
     if (e[0] === 'pu'){
@@ -335,6 +336,6 @@ var Exec = function(stmts){
     }
     return evalStmt(closure.body, frame)
   }
-  return evalStmt(stmts, { "__up__": null})
+  return evalStmt(stmts, window.interpreterEnv)
 }
 
