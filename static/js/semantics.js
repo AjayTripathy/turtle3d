@@ -40,11 +40,11 @@
 
   window.turnRight = function(angle, state){
     console.log(state);
-    yaw(angle, state);
+    yaw(-angle, state);
   }
 
   window.turnLeft = function(angle, state){
-    yaw(-angle, state);
+    yaw(angle, state);
   }
 
   window.turnIn = function(angle, state){
@@ -77,9 +77,9 @@
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
 
-    newZ = cos*state.rotZ - sin*state.rotX + 0;
-    newX = sin*state.rotZ + cos*state.rotX + 0;
-    newY = state.rotY; // fuck efficiency
+    var newZ = cos*state.rotZ - sin*state.rotX + 0;
+    var newX = sin*state.rotZ + cos*state.rotX + 0;
+    var newY = state.rotY; // fuck efficiency
 
     state.rotX = newX;
     state.rotY = newY;
@@ -90,9 +90,9 @@
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
 
-    newZ = cos*state.rotZ + 0 + sin*state.rotY;
-    newX = state.rotX; // fuck efficiency
-    newY = -sin*state.rotZ + 0 + cos*state.rotY;
+    var newZ = cos*state.rotZ + 0 + sin*state.rotY;
+    var newX = state.rotX; // fuck efficiency
+    var newY = -sin*state.rotZ + 0 + cos*state.rotY;
 
     state.rotX = newX;
     state.rotY = newY;
