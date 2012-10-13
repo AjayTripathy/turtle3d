@@ -31,14 +31,15 @@
       drawLine(state.posX, state.posY, state.posZ, endX, endY, endZ, state.penColor);
     }
 
-    moveTurtleTo(state.posX, state.posY, state.posZ, endX, endY, endZ);
+    moveTurtleTo(endX, endY, endZ);
 
-    state.x = endX;
-    state.y = endY;
-    state.z = endZ;
+    state.posX = endX;
+    state.posY = endY;
+    state.posZ = endZ;
   }
 
   window.turnRight = function(angle, state){
+    console.log(state);
     yaw(angle, state);
   }
 
