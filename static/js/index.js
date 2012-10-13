@@ -28,10 +28,10 @@ window.onload = function() {
         near = 0.1,
         far = 1000;
 
-    renderer = new THREE.WebGLRenderer();
-    camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    var renderer = new THREE.WebGLRenderer();
+    var camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.z = CAMERA_RADIUS;
-    scene = new THREE.Scene();
+    var scene = new THREE.Scene();
     scene.add(camera);
     renderer.setSize(width, height);
     document.body.appendChild(renderer.domElement);
@@ -63,6 +63,10 @@ window.onload = function() {
         camera.position.z = z;
         camera.lookAt(new THREE.Vector3(0,0,0));
         renderer.render(scene, camera);
+    };
+
+    var moveTurtleTo = function(x, y, z) {
+
     };
 
 
