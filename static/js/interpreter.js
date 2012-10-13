@@ -5,7 +5,7 @@ var Closure = function(body, args, env, recurse){
   this.recurse = recurse
 }
 
-window.state = window.makeState();
+window.state = null;
 window.interpreterEnv = { "__up__": null}; 
 var Exec = function(stmts){  
   var evalExp = function(e, env){

@@ -59,7 +59,7 @@ window.onload = function() {
 
     //turtle
     var loader = new THREE.JSONLoader();
-    var turtle;
+    turtle = null;
     var TURTLE_X, TURTLE_Y, TURTLE_Z, TURTLE_R_X, TURTLE_R_Y, TURTLE_R_Z;
     var TURTLE_MOVE_SPEED = 5,
         TURTLE_ROTATE_SPEED = 0.05;
@@ -131,7 +131,6 @@ window.onload = function() {
         turtle.rotation.y = yradians;
         turtle.rotation.z = zradians;
     };
-*/
 
     window.rotateTurtleTo = function(xdegrees, ydegrees, zdegrees) {
         var xradians = Math.PI * xdegrees/180;
@@ -141,11 +140,61 @@ window.onload = function() {
         TURTLE_R_Y = yradians % (2*Math.PI);
         TURTLE_R_Z = zradians % (2*Math.PI);
     };
+*/
 
-    window.moveTurtleTo = function(x, y, z) {
+    var getHeading = function() {
+        var heading = new THREE.Vector3(0, 0, 1);
+        var rotationMatrix = new THREE.Matrix4();
+        rotationMatrix.makeRotationAxis(new THREE.Vector3(1, 0, 0), turtle.rotation.x);
+        heading = rotationMatrix.multiplyVector3(heading);
+        rotationMatrix.makeRotationAxis(new THREE.Vector3(0, 1, 0), turtle.rotation.y);
+        heading = rotationMatrix.multiplyVector3(heading);
+        rotationMatrix.makeRotationAxis(new THREE.Vector3(0, 0, 1), turtle.rotation.z);
+        heading = rotationMatrix.multiplyVector3(heading);
+        return heading;
+    };
+
+    var rotateTurtle = function(axis, radians) {
+        var rotationMatrix = new THREE.Matrix4();
+        rotationMatrix.makeRotationAxis(axis.normalize(), radians);
+        turtle.matrix.multiplySelf(rotationMatrix);
+        var rotation = new THREE.Vector3().setEulerFromRotationMatrix(turtle.matrix);
+        TURTLE_R_X = rotation.x;
+        TURTLE_R_Y = rotation.y;
+        TURTLE_R_Z = rotation.z;
+    };
+
+    var moveTurtleTo = function(x, y, z) {
         TURTLE_X = x + centerX;
         TURTLE_Y = y + centerY;
         TURTLE_Z = z + centerZ;
+    };
+
+    window.turnRight = function(angle) {
+        rotateTurtle(turtle.up, angle);
+    };
+
+    window.turnLeft = function(angle) {
+        turnRight(-angle);
+    };
+
+    window.turnIn = function(angle) {
+        var heading = getHeading();
+        var rotationAxis = heading.crossSelf(turtle.up);
+        rotateTurtle(rotationAxis, angle);
+    };
+
+    window.turnOut = function(angle) {
+        turnIn(-angle);
+    };
+
+    window.forward = function(dist) {
+        var heading = getHeading();
+        heading.normalize();
+        heading.multiplyScalar(dist);
+        TURTLE_X = turtle.position.x + heading.x;
+        TURTLE_Y = turtle.position.y + heading.y;
+        TURTLE_Z = turtle.position.z + heading.z;
     };
 
     var animate = function() {
