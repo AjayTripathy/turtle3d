@@ -180,7 +180,15 @@ window.onload = function() {
     };
 
     window.turnIn = function(angle) {
-        TURTLE_R_X = turtle.rotation.x + angle;
+        var rotationMatrix1 = new THREE.Matrix4();
+        rotationMatrix1.extractRotation(turtle.matrix);
+        var rotationMatrix2 = new THREE.Matrix4();
+        rotationMatrix2.setRotationFromEuler(new THREE.Vector3(angle, 0, 0), "XYZ");
+        rotationMatrix1.multiplySelf(rotationMatrix2);
+        var euler = new THREE.Vector3().setEulerFromRotationMatrix(rotationMatrix1);
+        TURTLE_R_X = euler.x;
+        TURTLE_R_Y = euler.y;
+        TURTLE_R_Z = euler.z;
         window.TURTLE_IS_MOVING = true;
     };
 
