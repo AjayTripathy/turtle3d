@@ -2,7 +2,7 @@
 
 (function(window){
 
-  window.makeEnv = function(){
+  window.makeState = function(){
     return {
       rotX: 1,
       rotY: 0,
@@ -18,84 +18,84 @@
     };
   }
 
-  window.forward = function(dist, env) {
-    var start = env.startPos;
+  window.forward = function(dist, state) {
+    var start = state.startPos;
 
     // Translate pos vector by rot vector
-    var endX = env.posX + dist*env.rotX;
-    var endY = env.posY + dist*env.rotY;
-    var endZ = env.posZ + dist*env.rotZ;
+    var endX = state.posX + dist*state.rotX;
+    var endY = state.posY + dist*state.rotY;
+    var endZ = state.posZ + dist*state.rotZ;
 
 
-    if(env.penActive){
-      drawLine(env.posX, env.posY, end.posZ, endX, endY, endZ, env.penColor);
+    if(state.penActive){
+      drawLine(state.posX, state.posY, end.posZ, endX, endY, endZ, state.penColor);
     }
 
-    moveTurtle(env.posX, env.posY, env.posZ, endX, endY, endZ);
+    moveTurtle(state.posX, state.posY, state.posZ, endX, endY, endZ);
 
-    env.x = endX;
-    env.y = endY;
-    env.z = endZ;
+    state.x = endX;
+    state.y = endY;
+    state.z = endZ;
   }
 
-  window.turnRight = function(angle, env){
-    yaw(angle, env);
+  window.turnRight = function(angle, state){
+    yaw(angle, state);
   }
 
-  window.turnLeft = function(angle, env){
-    yaw(-angle, env);
+  window.turnLeft = function(angle, state){
+    yaw(-angle, state);
   }
 
-  window.turnIn = function(angle, env){
-    pitch(angle, env);
+  window.turnIn = function(angle, state){
+    pitch(angle, state);
   }
 
-  window.turnOut = function(angle, env){
-    pitch(-angle, env);
+  window.turnOut = function(angle, state){
+    pitch(-angle, state);
   }
   
-  window.penUp = function(env){
-    env.penActive = false;
+  window.penUp = function(state){
+    state.penActive = false;
   }
 
-  window.penDown = function(env){
-    env.penActive = true;
+  window.penDown = function(state){
+    state.penActive = true;
   }
 
-  window.penErase = function(env){
-    env.penErase = true;
+  window.penErase = function(state){
+    state.penErase = true;
   }
 
-  window.penColor = function(hex, env){
-    env.penColor = hex;
+  window.penColor = function(hex, state){
+    state.penColor = hex;
   }
 
 
   /* Internal functions */
-  function yaw(angle, env){
+  function yaw(angle, state){
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
 
-    newX = cos*env.rotX - sin*env.rotY + 0;
-    newY = sin*env.rotX + cos*env.rotY + 0;
-    newZ = env.rotZ; // fuck efficiency
+    newX = cos*state.rotX - sin*state.rotY + 0;
+    newY = sin*state.rotX + cos*state.rotY + 0;
+    newZ = state.rotZ; // fuck efficiency
 
-    env.rotX = newX;
-    env.rotY = newY;
-    env.rotZ = newZ;
+    state.rotX = newX;
+    state.rotY = newY;
+    state.rotZ = newZ;
   }
 
-  function pitch(angle, env){
+  function pitch(angle, state){
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
 
-    newX = cos*env.rotX + 0 + sin*env.rotZ;
-    newY = env.rotY; // fuck efficiency
-    newZ = -sin*env.rotX + 0 + cos*env.rotZ;
+    newX = cos*state.rotX + 0 + sin*state.rotZ;
+    newY = state.rotY; // fuck efficiency
+    newZ = -sin*state.rotX + 0 + cos*state.rotZ;
 
-    env.rotX = newX;
-    env.rotY = newY;
-    env.rotZ = newZ;
+    state.rotX = newX;
+    state.rotY = newY;
+    state.rotZ = newZ;
   }
 
   
