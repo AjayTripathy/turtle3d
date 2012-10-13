@@ -77,9 +77,9 @@
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
 
-    newX = cos*state.rotX - sin*state.rotY + 0;
-    newY = sin*state.rotX + cos*state.rotY + 0;
-    newZ = state.rotZ; // fuck efficiency
+    newZ = cos*state.rotZ - sin*state.rotX + 0;
+    newX = sin*state.rotZ + cos*state.rotX + 0;
+    newY = state.rotY; // fuck efficiency
 
     state.rotX = newX;
     state.rotY = newY;
@@ -90,9 +90,9 @@
     var sin = Math.sin(angle);
     var cos = Math.cos(angle);
 
-    newX = cos*state.rotX + 0 + sin*state.rotZ;
-    newY = state.rotY; // fuck efficiency
-    newZ = -sin*state.rotX + 0 + cos*state.rotZ;
+    newZ = cos*state.rotZ + 0 + sin*state.rotY;
+    newX = state.rotX; // fuck efficiency
+    newY = -sin*state.rotZ + 0 + cos*state.rotY;
 
     state.rotX = newX;
     state.rotY = newY;
