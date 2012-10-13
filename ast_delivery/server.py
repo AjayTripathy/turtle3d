@@ -32,7 +32,6 @@ class buildAst:
     #desugaredE = desugarer.desugar( library + ast)
     desugaredE = bytecode_compiler.desugar(library + ast)
     web.header('Content-Type', 'application/javascript')
-    print desugaredE
     return "%s(%s)" % (callback, json.dumps(desugaredE)) 
 
 

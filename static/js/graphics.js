@@ -61,13 +61,11 @@ window.onload = function() {
     var loader = new THREE.JSONLoader();
     turtle = null;
     var TURTLE_X, TURTLE_Y, TURTLE_Z, TURTLE_R_X, TURTLE_R_Y, TURTLE_R_Z;
-    var TURTLE_MOVE_SPEED = 5,
-        TURTLE_ROTATE_SPEED = 0.05;
+    var TURTLE_MOVE_SPEED = 50,
+        TURTLE_ROTATE_SPEED = 0.1;
     window.onTurtleAnimationEnd = function() {
-    console.log('turtle movement complete')
       if (window.qdActions.length > 0){ 
               var qdState = window.qdActions.splice(0,1)[0];
-                  console.log(qdState)
                       var qdFn = qdState.fn;
                           var args = qdState.args;
                               qdFn.apply(this, args);
@@ -282,8 +280,8 @@ window.onload = function() {
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
                 && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z) {
                 TURTLE_IS_MOVING = false;
-                console.log(LAST_LINE);
-                console.log(turtle);
+                //console.log(LAST_LINE);
+                //console.log(turtle);
                 LAST_LINE = null;
                 onTurtleAnimationEnd();
             }

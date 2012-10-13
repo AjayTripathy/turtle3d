@@ -125,14 +125,11 @@ var Exec = function(stmts){
        return Math.sqrt(evalExp(e[1], env))
     }
     if (e[0] === 'fd'){
-      console.log(state);
       var dist = evalExp(e[1] , env);
       if (window.TURTLE_IS_MOVING){
-        console.log('queing forward');
         window.qdActions.push({fn: window.forward , args: [dist , state]}); 
       }
       else{
-        console.log('calling fwd');
         window.forward(dist, state);
       }
     }
@@ -150,11 +147,9 @@ var Exec = function(stmts){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
       if (window.TURTLE_IS_MOVING){
-        console.log('qing rt');
         window.qdActions.push({fn: window.turnRight , args: [rad ,state ]}); 
       }   
       else{
-        console.log('calling right')
         window.turnRight(rad, state);
       }   
 
