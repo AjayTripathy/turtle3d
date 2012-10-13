@@ -31,7 +31,7 @@
       drawLine(state.posX, state.posY, end.posZ, endX, endY, endZ, state.penColor);
     }
 
-    moveTurtle(state.posX, state.posY, state.posZ, endX, endY, endZ);
+    moveTurtleTo(state.posX, state.posY, state.posZ, endX, endY, endZ);
 
     state.x = endX;
     state.y = endY;
