@@ -20,7 +20,7 @@ window.onload = function() {
     window.CAMERA_DISTANCE = 200;
     window.CAMERA_ROTATION_H = 0;
     window.CAMERA_ROTATION_V = 0;
-    window.CAMERA_FOV = 90;
+    window.CAMERA_FOV = 75;
     window.CAMERA_FOV_MIN = 5;
     window.CAMERA_FOV_MAX = 120;
 
@@ -28,8 +28,11 @@ window.onload = function() {
         height = window.innerHeight,
         aspect = width/height,
         near = 0.1,
-        far = 1000;
- 
+        far = 1000,
+        centerX = 0,
+        centerY = 0;
+
+    var defaultColor = Math.round(Math.random() * 16777215); 
 
     // camera + renderer
     var renderer = new THREE.WebGLRenderer();
@@ -51,22 +54,29 @@ window.onload = function() {
     //turtle
     var loader = new THREE.JSONLoader();
     var turtle;
+    var TURTLE_X, TURTLE_Y, TURTLE_Z, TURTLE_R_X, TURTLE_R_Y, TURTLE_R_Z;
+    var TURTLE_MOVE_SPEED = 5,
+        TURTLE_ROTATE_SPEED = 0.05;
+    window.onTurtleAnimationEnd = function() {console.log('turtle movement complete')};
     loader.load('static/models/turtle/turtle.js', function(geometry) {
-        var material = new THREE.MeshLambertMaterial({color: 0x00C986});
+        var material = new THREE.MeshLambertMaterial({color: defaultColor});
         turtle = new THREE.Mesh(geometry, material);
-        turtle.scale.x = 500;
-        turtle.scale.y = 500;
-        turtle.scale.z = 500;
-        window.TURTLE_X = turtle.position.x;
-        window.TURTLE_Y = turtle.position.y;
-        window.TURTLE_Z = turtle.position.z;
+        turtle.scale.x = 250;
+        turtle.scale.y = 250;
+        turtle.scale.z = 250;
+        TURTLE_X = turtle.position.x;
+        TURTLE_Y = turtle.position.y;
+        TURTLE_Z = turtle.position.z;
+        TURTLE_R_X = turtle.rotation.x;
+        TURTLE_R_Y = turtle.rotation.y;
+        TURTLE_R_Z = turtle.rotation.z;
         scene.add(turtle);
     });
 
 
     window.drawLine = function(x0, y0, z0, x1, y1, z1, color) {
         if (!color) {
-            color = 0x000000;
+            color = defaultColor;
         }
         var geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(x0, y0, z0));
@@ -99,7 +109,7 @@ window.onload = function() {
     window.moveTurtleTo = function(x, y, z) {
         turtle.position = new THREE.Vector3(x, y, z);
     };
-*/
+
     window.rotateTurtleTo = function(xdegrees, ydegrees, zdegrees) {
         var xradians = Math.PI * xdegrees/180;
         var yradians = Math.PI * ydegrees/180;
@@ -108,28 +118,80 @@ window.onload = function() {
         turtle.rotation.y = yradians;
         turtle.rotation.z = zradians;
     };
+*/
+
+    window.rotateTurtleTo = function(xdegrees, ydegrees, zdegrees) {
+        var xradians = Math.PI * xdegrees/180;
+        var yradians = Math.PI * ydegrees/180;
+        var zradians = Math.PI * zdegrees/180;
+        TURTLE_R_X = xradians % (2*Math.PI);
+        TURTLE_R_Y = yradians % (2*Math.PI);
+        TURTLE_R_Z = zradians % (2*Math.PI);
+    };
 
     window.moveTurtleTo = function(x, y, z) {
-        window.TURTLE_X = x;
-        window.TURTLE_Y = y;
-        window.TURTLE_Z = z;
+        TURTLE_X = x;
+        TURTLE_Y = y;
+        TURTLE_Z = z;
     };
 
     var animate = function() {
         requestAnimationFrame(animate);
         var turtleMoved = false;
-        /*
-        if (turtle.position.x > TURTLE_X) {
-            turtle.position.x = Math.max(turtle.position.1;
-            turtleMoved = true;
+        if (turtle) {
+            if (turtle.position.x > TURTLE_X) {
+                turtle.position.x = Math.max(turtle.position.x - TURTLE_MOVE_SPEED, TURTLE_X);
+                turtleMoved = true;
+            }
+            if (turtle.position.x < TURTLE_X) {
+                turtle.position.x = Math.min(turtle.position.x + TURTLE_MOVE_SPEED, TURTLE_X);
+                turtleMoved = true;
+            }
+            if (turtle.position.y > TURTLE_Y) {
+                turtle.position.y = Math.max(turtle.position.y - TURTLE_MOVE_SPEED, TURTLE_Y);
+                turtleMoved = true;
+            }
+            if (turtle.position.y < TURTLE_Y) {
+                turtle.position.y = Math.min(turtle.position.y + TURTLE_MOVE_SPEED, TURTLE_Y);
+                turtleMoved = true;
+            }
+            if (turtle.position.z > TURTLE_Z) {
+                turtle.position.z = Math.max(turtle.position.z - TURTLE_MOVE_SPEED, TURTLE_Z);
+                turtleMoved = true;
+            }
+            if (turtle.position.z < TURTLE_Z) {
+                turtle.position.z = Math.min(turtle.position.z + TURTLE_MOVE_SPEED, TURTLE_Z);
+                turtleMoved = true;
+            }
+            if (turtle.rotation.x > TURTLE_R_X) {
+                turtle.rotation.x = Math.max(turtle.rotation.x - TURTLE_ROTATE_SPEED, TURTLE_R_X);
+                turtleMoved = true;
+            }
+            if (turtle.rotation.x < TURTLE_R_X) {
+                turtle.rotation.x = Math.min(turtle.rotation.x + TURTLE_ROTATE_SPEED, TURTLE_R_X);
+                turtleMoved = true;
+            }
+            if (turtle.rotation.y > TURTLE_R_Y) {
+                turtle.rotation.y = Math.max(turtle.rotation.y - TURTLE_ROTATE_SPEED, TURTLE_R_Y);
+                turtleMoved = true;
+            }
+            if (turtle.rotation.y < TURTLE_R_Y) {
+                turtle.rotation.y = Math.min(turtle.rotation.y + TURTLE_ROTATE_SPEED, TURTLE_R_Y);
+                turtleMoved = true;
+            }
+            if (turtle.rotation.z > TURTLE_R_Z) {
+                turtle.rotation.z = Math.max(turtle.rotation.z - TURTLE_ROTATE_SPEED, TURTLE_R_Z);
+                turtleMoved = true;
+            }
+            if (turtle.rotation.z < TURTLE_R_Z) {
+                turtle.rotation.z = Math.min(turtle.rotation.z + TURTLE_ROTATE_SPEED, TURTLE_R_Z);
+                turtleMoved = true;
+            }
+            if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
+                && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z ) {
+                onTurtleAnimationEnd();
+            }
         }
-        if (turtle.position.x < TURTLE_X) {
-            turlte.position.x += 1;
-        }
-        if (turtle.position.x != TURTLE_X || turtle.position.y != TURTLE_Y || turtle.position.z != TURTLE_Z) {
-
-        }
-        */
         renderer.render(scene, camera);
     };
 
@@ -137,9 +199,9 @@ window.onload = function() {
 
 
     // testing stuff
-    drawLine(0, 0, 0, 100, 0, 0, 0xff0000);
-    drawLine(0, 0, 0, 0, 100, 0, 0x00ff00);
-    drawLine(0, 0, 0, 0, 0, 100, 0x0000ff);
+    drawLine(0, 0, 0, 50, 0, 0, 0xff0000);
+    drawLine(0, 0, 0, 0, 50, 0, 0x00ff00);
+    drawLine(0, 0, 0, 0, 0, 50, 0x0000ff);
 
     //console.log(camera.position.x, camera.position.y, camera.position.z);
 
