@@ -151,7 +151,7 @@ var Exec = function(stmts){
       var rad = deg * (Math.PI / 180)
       if (window.TURTLE_IS_MOVING){
         console.log('qing rt');
-        window.qdActions.push({fn: window.turnRight , args: [dist , state]}); 
+        window.qdActions.push({fn: window.turnRight , args: [rad ,state ]}); 
       }   
       else{
         console.log('calling right')

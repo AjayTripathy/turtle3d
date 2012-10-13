@@ -11,6 +11,7 @@ def _while(c, b){
 	}
 }
 
+
 #def _for(e,s) {
 #	def t = e()
 #	if (t == null){
@@ -78,6 +79,7 @@ def _or(a,b) {
 # over keys 0 .. len(list)-1 If want, you can use that function when desugaring
 # for.
 def _getIterator_(list) {
+    print "ASKDJALKHFDKLASHDKJLAHSDKJALSHDAJKLSDHAKSDJHASKLJD"
     def q = 0-1
     def l = len(list)
     print list[0]
@@ -90,6 +92,7 @@ def _getIterator_(list) {
          } else { null } # terminates iteration
     }
 }
+
 
 def _comprehension(func, lst) {
 	map(func,lst)
@@ -112,19 +115,18 @@ def append(list,o) {
     list[len(list)]=o
 }
 
-# return an iterator which counts from start to stop
-def range(start, stop) {
-    def i = start
-    lambda() {
-        if(i < stop) {
-            def cur = i
-            i = i + 1
-            cur
-        } else {
-            null
-        }
-    }
+def range(stop){
+  def x = {}
+  def rangedHelp(i){
+    if (i < stop){
+      append(x, i)
+      rangedHelp(i + 1)
+    } else{ x } 
+
+  }
+  rangedHelp(0)
 }
+
 
 # return the n first elements of list
 def take_from(list, n) {
