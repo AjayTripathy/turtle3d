@@ -162,16 +162,10 @@ window.onload = function() {
         rotationMatrix.makeRotationAxis(axis.normalize(), radians);
         turtle.matrix.multiplySelf(rotationMatrix);
         var rotation = new THREE.Vector3().setEulerFromRotationMatrix(turtle.matrix);
-        TURTLE_R_X = rotation.x;
-        TURTLE_R_Y = rotation.y;
-        TURTLE_R_Z = rotation.z;
-    };
-
-    var moveTurtleTo = function(x, y, z) {
-        TURTLE_X = x + centerX;
-        TURTLE_Y = y + centerY;
-        TURTLE_Z = z + centerZ;
-        if (TURTLE_X != turtle.position.x || TURTLE_Y != turtle.position.y || TURTLE_Z != turtle.position.z) {
+        TURTLE_R_X = turtle.rotation.x + rotation.x;
+        TURTLE_R_Y = turtle.rotation.y + rotation.y;
+        TURTLE_R_Z = turtle.rotation.z + rotation.z;
+        if (rotation.x != 0 || rotation.y != 0 || rotation.z != 0) {
             window.TURTLE_IS_MOVING = true;
         }
     };
@@ -201,6 +195,9 @@ window.onload = function() {
         TURTLE_X = turtle.position.x + heading.x;
         TURTLE_Y = turtle.position.y + heading.y;
         TURTLE_Z = turtle.position.z + heading.z;
+        if (heading.x != 0 || heading.y != 0 || heading.z != 0) {
+            window.TURTLE_IS_MOVING = true;
+        }
     };
 
     var animate = function() {
