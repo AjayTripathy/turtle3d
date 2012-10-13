@@ -1,0 +1,32 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#usercount {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    padding: 5px;
+    color: #888;
+    font-size: 12px;
+    font-weight: 100;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 10px;
+}
+
+#usercount-icon {
+    width: 14px;
+    height: 14px;
+}
+
+#usercount-value {
+    position: relative;
+    top: -3px;
+}
+
+#canvas {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 1);
+}
