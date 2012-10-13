@@ -61,7 +61,7 @@ window.onload = function() {
     var loader = new THREE.JSONLoader();
     turtle = null;
     var TURTLE_X, TURTLE_Y, TURTLE_Z, TURTLE_R_X, TURTLE_R_Y, TURTLE_R_Z;
-    var TURTLE_MOVE_SPEED = 50,
+    var TURTLE_MOVE_SPEED = 10,
         TURTLE_ROTATE_SPEED = 0.1;
     window.onTurtleAnimationEnd = function() {
       if (window.qdActions.length > 0){ 
@@ -165,12 +165,8 @@ window.onload = function() {
     var getHeading = function() {
         var heading = new THREE.Vector3(0, 0, 1);
         var rotationMatrix = new THREE.Matrix4();
-        rotationMatrix.makeRotationAxis(new THREE.Vector3(1, 0, 0), turtle.rotation.x);
-        heading = rotationMatrix.multiplyVector3(heading);
-        rotationMatrix.makeRotationAxis(new THREE.Vector3(0, 1, 0), turtle.rotation.y);
-        heading = rotationMatrix.multiplyVector3(heading);
-        rotationMatrix.makeRotationAxis(new THREE.Vector3(0, 0, 1), turtle.rotation.z);
-        heading = rotationMatrix.multiplyVector3(heading);
+        rotationMatrix.extractRotation(turtle.matrix);
+        rotationMatrix.multiplyVector3(heading);
         return heading;
     };
 
@@ -260,8 +256,8 @@ window.onload = function() {
             }
             if (turtleMoved && LAST_LINE != null) {
                 var start = LAST_LINE.geometry.vertices[0];
-                drawLine(start.x, start.y, start.z, turtle.position.x, turtle.position.y, turtle.position.z);
                 scene.remove(LAST_LINE);
+                LAST_LINE = drawLine(start.x, start.y, start.z, turtle.position.x, turtle.position.y, turtle.position.z);
             }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
                 && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z) {
