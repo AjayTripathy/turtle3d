@@ -64,6 +64,7 @@ window.onload = function() {
     var TURTLE_MOVE_SPEED = 5,
         TURTLE_ROTATE_SPEED = 0.05;
     window.onTurtleAnimationEnd = function() {console.log('turtle movement complete')};
+    window.TURTLE_IS_MOVING = false;
     loader.load('static/models/turtle/turtle.js', function(geometry) {
         var material = new THREE.MeshLambertMaterial({color: defaultColor});
         turtle = new THREE.Mesh(geometry, material);
@@ -198,6 +199,9 @@ window.onload = function() {
             if (turtle.rotation.z < TURTLE_R_Z) {
                 turtle.rotation.z = Math.min(turtle.rotation.z + TURTLE_ROTATE_SPEED, TURTLE_R_Z);
                 turtleMoved = true;
+            }
+            if (turtleMoved) {
+                TURTLE_IS_MOVING = turtleMoved;
             }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
                 && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z ) {
