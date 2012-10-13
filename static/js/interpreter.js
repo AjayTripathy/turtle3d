@@ -7,6 +7,18 @@ var Closure = function(body, args, env, recurse){
 
 window.state = null;
 window.interpreterEnv = { "__up__": null}; 
+window.qdActions = [];
+window.onTurtleAnimationEnd = function() {
+  console.log('turtle movement complete')
+  if (window.qdActions.length > 0){ 
+    var qdState = window.qdActions.splice(0,1)[0];
+    console.log(qdState)
+    var qdFn = qdState.fn;
+    var args = qdState.args;
+    qdFn.apply(this, args);
+  }   
+};  
+
 var Exec = function(stmts){  
   var evalExp = function(e, env){
     var lookup = function(name, env){
@@ -115,7 +127,14 @@ var Exec = function(stmts){
     if (e[0] === 'fd'){
       console.log(state);
       var dist = evalExp(e[1] , env);
-      window.forward(dist, state);      
+      if (window.TURTLE_IS_MOVING){
+        console.log('queing forward');
+        window.qdActions.push({fn: window.forward , args: [dist , state]}); 
+      }
+      else{
+        console.log('calling fwd');
+        window.forward(dist, state);
+      }
     }
     if (e[0] === 'bk'){
      var dist = evalExp(e[1] , env);
@@ -130,7 +149,15 @@ var Exec = function(stmts){
     if (e[0] === 'rt'){
       var deg = evalExp(e[1], env)
       var rad = deg * (Math.PI / 180)
-      window.turnRight(rad, state);
+      if (window.TURTLE_IS_MOVING){
+        console.log('qing rt');
+        window.qdActions.push({fn: window.turnRight , args: [dist , state]}); 
+      }   
+      else{
+        console.log('calling right')
+        window.turnRight(rad, state);
+      }   
+
     }
     if (e[0] === 'ti'){
       var deg = evalExp(e[1], env)

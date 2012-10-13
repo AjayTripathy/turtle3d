@@ -139,6 +139,9 @@ window.onload = function() {
         TURTLE_R_X = xradians % (2*Math.PI);
         TURTLE_R_Y = yradians % (2*Math.PI);
         TURTLE_R_Z = zradians % (2*Math.PI);
+        if (TURTLE_R_X != turtle.rotation.x || TURTLE_R_Y != turtle.rotation.y || TURTLE_R_Z != turtle.rotation.z) {
+            window.TURTLE_IS_MOVING = true;
+        }
     };
 */
 
@@ -168,6 +171,9 @@ window.onload = function() {
         TURTLE_X = x + centerX;
         TURTLE_Y = y + centerY;
         TURTLE_Z = z + centerZ;
+        if (TURTLE_X != turtle.position.x || TURTLE_Y != turtle.position.y || TURTLE_Z != turtle.position.z) {
+            window.TURTLE_IS_MOVING = true;
+        }
     };
 
     window.turnRight = function(angle) {
@@ -249,11 +255,9 @@ window.onload = function() {
                 turtle.rotation.z = Math.min(turtle.rotation.z + TURTLE_ROTATE_SPEED, TURTLE_R_Z);
                 turtleMoved = true;
             }
-            if (turtleMoved) {
-                TURTLE_IS_MOVING = turtleMoved;
-            }
             if (turtleMoved && TURTLE_X == turtle.position.x && TURTLE_Y == turtle.position.y && TURTLE_Z == turtle.position.z 
                 && TURTLE_R_X == turtle.rotation.x && TURTLE_R_Y == turtle.rotation.y && TURTLE_R_Z == turtle.rotation.z ) {
+                TURTLE_IS_MOVING = false;
                 onTurtleAnimationEnd();
             }
         }
